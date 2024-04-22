@@ -32,9 +32,8 @@ func NewHandler(port string, service TokenService) *Handler {
 
 func (h *Handler) mapRoutes() {
 
-	//h.Router.GET("/tokens/:id", h.GetRefreshToken)
-	h.Router.POST("/tokens/:id", h.PostRefreshToken)
-	h.Router.PUT("/tokens/:id", h.UpdateRefreshToken)
+	h.Router.POST("/token/:id", h.PostRefreshToken)
+	h.Router.PUT("refresh/token/:id", h.UpdateRefreshToken)
 }
 
 func (h *Handler) Serve(port string) error {

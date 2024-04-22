@@ -8,6 +8,7 @@ import (
 	jwT "github.com/instinctG/Test-task/internal/jwt"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"regexp"
 )
 
 type Guid struct {
@@ -24,34 +25,22 @@ func (h *Handler) PostRefreshToken(c *gin.Context) {
 	//get the guid
 	guid := c.Param("id")
 
-	if guid == "" {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "guid is nil"})
+	if !IsValidUUID(guid) {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "guid is invalid"})
 		return
 	}
 
 	sendTokenResponse(c, guid, h.Service.PostRefreshToken)
 }
 
-// GetRefreshToken - получает guid с запроса и по guid возвращает данные с БД в формате JSON
-/*
-func (h *Handler) GetRefreshToken(c *gin.Context) {
-	guid := c.Param("id")
-
-	ref, err := h.Service.ReadRefreshToken(c, guid)
-	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "couldn't read token from db"})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, ref)
-}
-*/
-
 // UpdateRefreshToken - получает access и refresh токены с JSON body и передает их по guid в базу данных MongoDB
 // для обновления их в базе и выдает пару обновленных access и refresh токенов
 func (h *Handler) UpdateRefreshToken(c *gin.Context) {
 	guid := c.Param("id")
-
+	if !IsValidUUID(guid) {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "guid is invalid"})
+		return
+	}
 	var token jwT.Token
 	var claims *jwT.TokenClaims
 	var err error
@@ -125,4 +114,9 @@ func (h *Handler) ValidateRefreshToken(ctx context.Context, guid, refresh string
 		}
 	}
 	return err
+}
+
+func IsValidUUID(uuid string) bool {
+	r := regexp.MustCompile("^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[8|9|aA|bB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$")
+	return r.MatchString(uuid)
 }
