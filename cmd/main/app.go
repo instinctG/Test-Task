@@ -13,11 +13,12 @@ import (
 
 func Run() error {
 	gin.SetMode(gin.ReleaseMode)
-	config, err := config2.LoadConfig("C:/Users/azizs/Documents/Test-task/config")
+	config, err := config2.LoadConfig()
 	if err != nil {
 		log.Println(err)
 		return err
 	}
+	//"C:/Users/azizs/Documents/Test-task/config"
 
 	database, err := db.NewClient(context.Background(), config.MongoURL)
 	if err != nil {
@@ -32,9 +33,6 @@ func Run() error {
 	}
 	return nil
 
-	//router := gin.Default()
-
-	//router.Run(config.Port)
 }
 
 func main() {

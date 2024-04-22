@@ -8,8 +8,8 @@ type Config struct {
 	MongoURL  string `mapstructure:"mongoURL"`
 }
 
-func LoadConfig(path string) (config Config, err error) {
-	viper.AddConfigPath(path)
+func LoadConfig() (config Config, err error) {
+	viper.AddConfigPath("../../configs")
 	viper.SetConfigName("config")
 	viper.SetConfigType("yml")
 
