@@ -45,7 +45,7 @@ Access, Refresh токены обоюдно связаны, Refresh операц
 Использовал Postman.
 
 POST   /token/:guid
-![img_1.png](img_1.png)
+![img_1.png](images/img_1.png)
 
 PUT  /refresh/token/:guid
-![img_2.png](img_2.png)
+![img_2.png](images/img_2.png)
